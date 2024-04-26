@@ -13,7 +13,7 @@ function Task() {
 
   useEffect(() => {
     if (DEBUG) setList([
-      newTask('TareFa 01'), 
+      newTask('Tarefa 01'), 
       newTask('Tarefa 02'), 
       newTask('Tarefa 03'), 
       newTask('Tarefa 04'), 
@@ -62,7 +62,7 @@ function Task() {
         <div className='text-3xl mb-8 '>Lista de Tarefas do Samuel:</div>
         {loading && <div className='text-xl animate-pulse'>loading...</div>}
         {!loading && <div className='flex flex-row gap-2 items-center pb-2'>
-          <div className='text-xl '>tarefa:</div>
+          <div className='text-xl '>Tarefa:</div>
           <div className=''>
             <input type="text" name="tarefa" id="tarefa" value={task} 
             className='bg-transparent border-0 border-b border-b-slate-500 focus:outline-none px-2 text-2xl' 
