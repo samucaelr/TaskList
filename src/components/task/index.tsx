@@ -2,24 +2,26 @@ import { SetStateAction, useEffect, useState } from 'react'
 import { PlusCircle, Save } from 'react-feather';
 
 import TaskItem from './taskItem'
-import { typeTask } from './typeTask';
-import { filterComplete, filterUnComplete, newTask, sortTitleAsc } from '../../utils/task';
+import { typeTask } from '../../types/typeTask';
+import { filterComplete, filterUnComplete, newTask, sortPriorityAsc, sortTitleAsc } from '../../utils/task';
 
 function Task() {
   const [loading, setLoading] = useState<boolean>(true)
   const [task, setTask] = useState<string>('')
   const [list, setList] = useState<typeTask[]>([])
   const DEBUG = true  
+  const complete = false
+  const owner = 'samucaelrezende@gmail.com'
 
   useEffect(() => {
     if (DEBUG) setList([
-      newTask('Tarefa 01'), 
-      newTask('Tarefa 02'), 
-      newTask('Tarefa 03'), 
-      newTask('Tarefa 04'), 
-      newTask('Tarefa quase finalizada')])
+      newTask({title: 'Tarefa 01', complete, owner, tags: ['Filipe', 'NEW'], priority: 1}), 
+      newTask({title: 'Tarefa 02', complete, owner, priority: 2}), 
+      newTask({title: 'Tarefa 03', complete, owner, priority: 3}), 
+      newTask({title: 'Tarefa 04', complete, owner, priority: 2}), 
+      newTask({title: 'Tarefa quase finalizada', complete, owner, priority: 1})].sort(sortPriorityAsc))
     setLoading(false)
-  }, [])
+  }, [DEBUG, complete, owner])
   const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
     setTask(e.target.value)
   }
@@ -29,7 +31,7 @@ function Task() {
 
   const handleAdd = () => {
     if(task?.length){
-      list.push(newTask(task))
+      list.push(newTask({title: task, complete, owner, priority: 1}))
       setList(list)
       setTask('')
       if (DEBUG) console.debug(list)
@@ -44,7 +46,7 @@ function Task() {
   }
   const handleSaveItem = (item: typeTask, index: number) => {
     list[index] = item
-    const newList = [...list.filter(filterUnComplete).sort(sortTitleAsc), ...list.filter(filterComplete).sort(sortTitleAsc)]
+    const newList = [...list.filter(filterUnComplete).sort(sortPriorityAsc), ...list.filter(filterComplete).sort(sortTitleAsc)]
     setList(newList)
     if (DEBUG) console.debug(index, item, newList)
 }
@@ -58,7 +60,7 @@ function Task() {
 
   return (
     <>
-      <div className='absolute top-4 right-4 p-8 border border-slate-600 rounded-xl bg-black/50'>
+      <div className='absolute top-4 right-4 p-8 border border-slate-600 rounded-xl bg-black/50 w-[30rem]'>
         <div className='text-3xl mb-8 '>Lista de Tarefas do Samuel:</div>
         {loading && <div className='text-xl animate-pulse'>loading...</div>}
         {!loading && <div className='flex flex-row gap-2 items-center pb-2'>

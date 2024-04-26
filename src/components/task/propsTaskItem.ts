@@ -1,4 +1,4 @@
-import { typeTask } from "./typeTask";
+import { typeTask } from "../../types/typeTask";
 
 export type propsTaskItem = {
   item: typeTask;
