@@ -2,15 +2,22 @@ import { SetStateAction, useEffect, useState } from 'react'
 import { PlusCircle, Save } from 'react-feather';
 
 import TaskItem from './taskItem'
+import { typeTask } from './typeTask';
+import { filterComplete, filterUnComplete, newTask, sortTitleAsc } from '../../utils/task';
 
 function Task() {
   const [loading, setLoading] = useState<boolean>(true)
   const [task, setTask] = useState<string>('')
-  const [list, setList] = useState<string[]>([])
-  const DEBUG = true
+  const [list, setList] = useState<typeTask[]>([])
+  const DEBUG = true  
 
   useEffect(() => {
-    if (DEBUG) setList(['TareFa 01', 'Tarefa 02', 'Tarefa 03', 'Tarefa 04', 'Tarefa quase finalizada'])
+    if (DEBUG) setList([
+      newTask('TareFa 01'), 
+      newTask('Tarefa 02'), 
+      newTask('Tarefa 03'), 
+      newTask('Tarefa 04'), 
+      newTask('Tarefa quase finalizada')])
     setLoading(false)
   }, [])
   const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
@@ -22,7 +29,7 @@ function Task() {
 
   const handleAdd = () => {
     if(task?.length){
-      list.push(task)
+      list.push(newTask(task))
       setList(list)
       setTask('')
       if (DEBUG) console.debug(list)
@@ -35,10 +42,11 @@ function Task() {
     setList((data) => data.filter((_, key) => key != index))
 
   }
-  const handleSaveItem = (title: string, index: number) => {
-    list[index] = title
-    setList(list)
-    if (DEBUG) console.debug(list)
+  const handleSaveItem = (item: typeTask, index: number) => {
+    list[index] = item
+    const newList = [...list.filter(filterUnComplete).sort(sortTitleAsc), ...list.filter(filterComplete).sort(sortTitleAsc)]
+    setList(newList)
+    if (DEBUG) console.debug(index, item, newList)
 }
 
   const handleSave = () => {
@@ -69,7 +77,11 @@ function Task() {
         </div>}
         
         {!loading && list.length > 0 && <div className='flex flex-col gap-2 border border-slate-600 rounded-xl py-4 my-8'>
-          {list.map((title, index) => <TaskItem key={index} title={title} handleRemove={() => handleRemoveItem(index)} handleSave={handleSaveItem} index={index} />
+          {list.map((item, index) => 
+            <TaskItem key={index} item={item} 
+              handleRemove={() => handleRemoveItem(index)} 
+              handleSave={handleSaveItem} 
+              index={index} />
           )}
         </div>}
         {!loading && <div>

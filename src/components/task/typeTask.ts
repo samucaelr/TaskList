@@ -1,4 +1,4 @@
-type typeTask = {
+export type typeTask = {
   title: string;
   complete: boolean;
 };
