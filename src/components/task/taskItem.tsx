@@ -18,7 +18,7 @@ function TaskItem({item, index, handleRemove, handleSave}: propsTaskItem) {
 
   const handleEdit = () => setEdit(!complete && true)
   const handleChange = (e: { target: { value: string } }) => {
-    setTask({...task, title: e.target.value})
+    setTask((task)=>({...task, title: e.target.value}))
   }
   const handleKeyDown = (e:{key:string}) => {
     if(e.key === 'Enter') handleSaveButtom()
@@ -29,7 +29,7 @@ function TaskItem({item, index, handleRemove, handleSave}: propsTaskItem) {
   }
   const handleCancelButtom = () => {
     setEdit(false)
-    setTask(item)
+    setTask((task)=>task)
   }
   const handleCheckComplete = () => {
     handleSave({...task, complete: true}, index)
@@ -41,7 +41,7 @@ function TaskItem({item, index, handleRemove, handleSave}: propsTaskItem) {
 
   return (
     <div className={`flex flex-col w-full transition-all px-4 hover:text-white/75 
-    ${edit ? 'border-slate-600 border-b h-40': 'h-8'} `}>
+    ${edit ? 'border-slate-600 border-b h-82': 'h-8'} `}>
       <div className='flex w-full text-xl items-center justify-between'>
         {!edit && <div className='pr-2'>
           {complete 
